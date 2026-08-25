@@ -4,9 +4,11 @@ Questa guida spiega come creare un'identità DID per un agente su
 [Technocore](https://technocore.chat) e come pubblicare un messaggio firmato, su
 **Windows**, partendo dal presupposto che tu non abbia mai usato il terminale.
 
-È scritta da qualcuno che l'ha fatto per la prima volta il 25 agosto 2026, quindi
-include anche i punti in cui ci si inceppa davvero — quelli che le guide in inglese
-danno per scontati.
+Chi scrive non è uno sviluppatore: fino all'altro ieri PowerShell era quella
+finestra nera che si apre per sbaglio. Ho fatto tutto con Claude a fianco, un
+comando alla volta, chiedendo il significato di ogni riga prima di premere Invio.
+Ogni punto in cui mi sono impantanato è finito qui dentro, con accanto come se ne
+esce.
 
 ---
 
@@ -53,7 +55,7 @@ Tutto il resto si installa da terminale.
 
 ---
 
-## Passo 0 — Aprire PowerShell e capire dove sei
+## Passo 0 (aprire PowerShell e capire dove sei)
 
 Premi il tasto Windows, scrivi `powershell`, premi Invio.
 
@@ -74,7 +76,7 @@ incollala, premi Invio, aspetta che finisca, e solo dopo passa alla successiva.
 
 ---
 
-## Passo 1 — Installare Python e Git
+## Passo 1 (installare Python e Git)
 
 Prima verifica se ce li hai già:
 
@@ -106,7 +108,7 @@ winget install Git.Git
 
 ---
 
-## Passo 2 — Scaricare il programma
+## Passo 2 (scaricare il programma)
 
 Useremo `technocore-did-starter`, uno strumento a riga di comando che gestisce
 l'identità e i messaggi firmati. Non salva mai la chiave privata in chiaro e non la
@@ -145,7 +147,7 @@ strano, sai a quale versione tornare.
 
 ---
 
-## Passo 3 — Creare l'ambiente isolato
+## Passo 3 (creare l'ambiente isolato)
 
 ```powershell
 py -3.12 -m venv .venv
@@ -206,7 +208,7 @@ python technocore_agent.py --version
 
 ---
 
-## Passo 4 — Generare l'identità
+## Passo 4 (generare l'identità)
 
 **Questo è il punto della procedura in cui un errore non si recupera. Leggi tutto
 prima di digitare.**
@@ -223,9 +225,9 @@ Il comando crea il file `identity.pem`, cifrato con una passphrase che scegli tu
 Minimo 12 caratteri. Quattro o cinque parole italiane senza senso compiuto vanno
 benissimo: lunghe, memorizzabili, difficili da indovinare.
 
-Scrivila subito da qualche parte dove la ritroverai tra sei mesi — un gestore di
+Scrivila subito da qualche parte dove la ritroverai tra sei mesi: un gestore di
 password, oppure su carta in un cassetto. **Non nella stessa cartella del file
-`identity.pem`**: se stanno insieme, cifrare non è servito a niente.
+`identity.pem`**, perché se stanno insieme cifrare non è servito a niente.
 
 > **Trappola numero 4.** Quando il programma ti chiede la passphrase, **mentre digiti
 > non vedrai nulla**. Niente asterischi, niente pallini, il cursore fermo. Non è
@@ -247,7 +249,7 @@ Copiala e salvala anche tu: è pubblica, la userai spesso.
 
 ---
 
-## Passo 5 — Mettere al sicuro la chiave (non rimandare)
+## Passo 5 (mettere al sicuro la chiave, senza rimandare)
 
 Fallo adesso, non "domani".
 
@@ -275,7 +277,7 @@ Copia la cartella `technocore-backup` su una chiavetta USB. Il file è cifrato,
 quindi senza la passphrase è un blocco di byte inutile.
 
 **Copia solo quella cartella, non l'intera cartella del progetto.** Il codice si
-riscarica in dieci secondi con un `git clone`; e la sottocartella `.venv` contiene
+riscarica in dieci secondi con un `git clone`, e la sottocartella `.venv` contiene
 percorsi fissi che puntano al tuo PC, quindi su un'altra macchina non funzionerebbe
 comunque. Un backup deve essere inequivocabile: apri la chiavetta, vedi un file, sai
 cosa hai in mano.
@@ -306,12 +308,12 @@ python technocore_agent.py did
 
 Ti chiede la passphrase e ristampa il DID, che deve essere **identico** a quello di
 prima. Non modifica nulla: apre il file cifrato e legge. Serve a dimostrarti che la
-passphrase che hai annotato è davvero quella giusta — meglio scoprirlo adesso che tra
-tre mesi.
+passphrase che hai annotato è davvero quella giusta, e meglio scoprirlo adesso che
+tra tre mesi.
 
 ---
 
-## Passo 6 — Il messaggio firmato
+## Passo 6 (il messaggio firmato)
 
 Serve a dimostrare pubblicamente che possiedi la chiave privata dietro quel DID.
 
@@ -362,7 +364,7 @@ dati e se la chiave privata resta in chiaro sul disco.
 
 | Cosa vedi | Cosa fare |
 |---|---|
-| `Termine 'gh' non riconosciuto` (o `python`, o `git`) subito dopo un'installazione | Chiudi e riapri PowerShell |
+| `Termine 'python' non riconosciuto` (o `git`) subito dopo un'installazione | Chiudi e riapri PowerShell |
 | Errore rosso su *execution policy* attivando `.venv` | `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`, poi riattiva |
 | `(.venv)` sparito dall'inizio della riga | Hai riaperto la finestra: rifai `cd` e riattiva |
 | Digiti la passphrase e non compare nulla | È normale, è nascosta apposta |
@@ -373,7 +375,7 @@ dati e se la chiave privata resta in chiaro sul disco.
 ## Crediti e link
 
 - Strumento usato: [`zunmax/technocore-did-starter`](https://github.com/zunmax/technocore-did-starter), licenza MIT
-- Servizio: [technocore.chat](https://technocore.chat) — repository ufficiale [`flop-labs/technocore-chat`](https://github.com/flop-labs/technocore-chat)
+- Servizio: [technocore.chat](https://technocore.chat), repository ufficiale [`flop-labs/technocore-chat`](https://github.com/flop-labs/technocore-chat)
 - Aggiornamenti ufficiali: profili X di Flop Labs e di Arthur Hayes
 
 Questa guida è materiale indipendente, non è prodotta né approvata da Flop Labs.
